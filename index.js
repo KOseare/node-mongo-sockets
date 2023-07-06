@@ -1,18 +1,21 @@
+require('dotenv').config();
 const express = require('express');
 
-const app = express();
-app.use(express.json());
-app.use(express.urlencoded({extended: false}));
+const {connectDb} = require('./libs/db');
+const routes = require('./network/routes');
 
-const router = express.Router();
+async function start () {
+  const app = express();
+  app.use(express.json());
+  app.use(express.urlencoded({extended: false}));
+  routes(app);
 
-router.get('/', (req, res) => {
-  res.send('Hello world!');
-});
+  await connectDb();
+  
+  const port = process.env.PORT || 8080;
+  app.listen(port, () => {
+    console.log(`App listening in port ${port}`);
+  });
+}
 
-app.use(router);
-
-const port = process.env.PORT || 8080;
-app.listen(port, () => {
-  console.log(`App listening in port ${port}`);
-});
+start();
