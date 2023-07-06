@@ -1,4 +1,5 @@
 const store = require('./store');
+const {socket} = require('../../libs/socket');
 
 async function addMessage (user, message) {
   if (!user || !message) {
@@ -12,6 +13,9 @@ async function addMessage (user, message) {
     date: new Date()
   };
   await store.add(fullMessage);
+
+  socket.io.emit('message', fullMessage);
+
   return fullMessage;
 }
 
