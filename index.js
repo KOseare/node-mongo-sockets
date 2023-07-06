@@ -12,6 +12,7 @@ async function start () {
 
   app.use(express.json());
   app.use(express.urlencoded({extended: false}));
+  app.use(express.static('public'));
   routes(app);
 
   await connectDb();
